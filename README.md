@@ -1,16 +1,46 @@
 # KidsProtect
 
-## Install dependencies
+[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE) ![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey) ![Stack](https://img.shields.io/badge/stack-Electron%20%7C%20React%20%7C%20Bun%20%7C%20Express-593d88)
+
+Desktop app for enabling a “lockdown” mode and managing per-domain allow/deny lists. On macOS it programs PF and `/etc/hosts`; on Windows it programs `netsh advfirewall` rules and `hosts`, keeping the UI, backend, and system rules in sync.
+
+## Quick links
+
+- [Quick start](#quick-start)
+- [Build for release](#build-for-release)
+- [Install from releases](#install-from-releases)
+- [Security notes](#security-notes)
+- [Contributing](Contributing.md)
+- [License](LICENSE)
+
+## What it does
+
+- One-click lockdown that blocks all outbound traffic except whitelisted domains.
+- Per-domain allow/deny lists with normalization to avoid duplicates.
+- macOS: PF anchor + `/etc/hosts` entries; Windows: `netsh advfirewall` rules + `hosts`.
+- Electron shell bundles the React frontend and backend service for offline use.
+
+## Project layout
+
+- `frontend/` — React + Vite UI (Tailwind 4, Zustand, Radix).
+- `backend/` — Bun/Express service that applies firewall/hosts rules.
+- `desktop/` — Electron wrapper that runs the backend and serves the packaged UI.
+- `bun.lock`, `package.json` — workspace tooling.
+
+## Requirements
+
+- Bun ≥ 1.3
+- Node.js ≥ 18 (needed by Electron and when running the backend as a service)
+- macOS 12+ or Windows 10/11 for system rule control
+
+## Quick start
 
 ```bash
 bun install
+bun dev   # runs frontend, backend, and desktop together
 ```
 
-## Develop (frontend + backend + desktop)
-
-```bash
-bun dev
-```
+The backend listens on `http://localhost:8787` and the frontend dev server on `http://localhost:5173` by default.
 
 ## Build for release
 
@@ -20,50 +50,26 @@ cd frontend && bun run build
 # backend
 cd backend && bun run build
 # desktop (Electron)
-cd desktop && bun run dist  # or from desktop: bun run build-all
+cd desktop && bun run dist   # or from desktop: bun run build-all
 ```
 
-Artifacts land in `desktop/release/` (dmg on mac, nsis on Windows when built on that platform).
+Artifacts land in `desktop/release/` (DMG on macOS, NSIS installer on Windows when built on that platform).
 
-## Run with admin privileges
+## Install from releases
 
-System rule changes (hosts/pf/netsh) need elevation.
+- Download the latest release from GitHub Releases (DMG for macOS, NSIS installer for Windows).
+- macOS: open the DMG and drag KidsProtect to Applications. First launch may prompt for admin rights to apply PF/hosts rules.
+- Windows: run the installer. UAC will prompt when creating firewall rules or services. The backend listens on localhost for the Electron UI.
 
-- **macOS**: build backend (`cd backend && bun run build`), then start it as root:
-  ```bash
-  ./scripts/mac/start-backend-root.sh
-  ```
-  Or launch the packaged app via Terminal:
-  ```bash
-  sudo -E env "PATH=$PATH" /Applications/KidsProtect.app/Contents/MacOS/KidsProtect
-  ```
-- **Windows**: build backend (`cd backend && bun run build`), then run elevated:
-  ```powershell
-  powershell -ExecutionPolicy Bypass -File scripts/windows/start-backend-admin.ps1
-  ```
-  Or right-click the packaged app → Run as administrator.
+## Security notes
 
-## Install persistent backend services
+- The backend is unauthenticated; run it bound to `127.0.0.1` and keep it firewalled when elevated.
+- Avoid shipping personal state; do not bundle local `backend/state.json` in releases if it contains your data.
 
-These install a privileged backend that starts at boot and listens on localhost for the Electron app.
+## Contributing
 
-- **macOS (launchd daemon)**:
-  - Installer: the `.pkg` target installs and starts the daemon automatically (admin prompt required).
-  - Manual: 
-    ```bash
-    cd backend && bun run build
-    sudo ./scripts/mac/install-daemon.sh
-    # To remove:
-    sudo ./scripts/mac/uninstall-daemon.sh
-    ```
-- **Windows (service)**:
-  - Installer: the NSIS installer creates and starts the `KidsProtectBackend` service (UAC prompt).
-  - Manual:
-    ```powershell
-    cd backend; bun run build
-    powershell -ExecutionPolicy Bypass -File scripts/windows/install-service.ps1
-    # To remove:
-    powershell -ExecutionPolicy Bypass -File scripts/windows/uninstall-service.ps1
-    ```
+See [Contributing.md](Contributing.md) for development flow and PR guidelines.
 
-These scripts assume Node is installed on the machine (used to run the backend). The Electron app should talk to the backend on `http://localhost:8787`.
+## License
+
+GPL-3.0 — see [LICENSE](LICENSE).
