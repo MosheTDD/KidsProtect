@@ -80,8 +80,8 @@ const createWindow = async (): Promise<void> => {
 
   mainWindow = new BrowserWindow({
     title: 'KidsProtect',
-    width: 900,
-    height: 600,
+    width: 1280,
+    height: 775,
     icon:
       process.platform === 'darwin'
         ? path.join(__dirname, 'assets', 'icon.icns')
