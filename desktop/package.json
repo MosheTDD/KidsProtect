@@ -52,10 +52,6 @@
       {
         "from": "../backend/dist",
         "to": "app/backend"
-      },
-      {
-        "from": "../backend/node_modules",
-        "to": "app/backend/node_modules"
       }
     ],
     "mac": {
