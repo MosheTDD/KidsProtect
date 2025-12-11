@@ -2,7 +2,7 @@ name: Release
 
 on:
   push:
-    branches: [main] # switch to tags: ['v*'] if you prefer tag-driven releases
+    branches: 'v*'
 
 permissions:
   contents: write
