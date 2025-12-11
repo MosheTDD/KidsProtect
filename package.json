@@ -9,6 +9,10 @@
     "backend",
     "desktop"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/moshekhovailo/KidsProtect.git"
+  },
   "scripts": {
     "dev:frontend": "cd frontend && bun dev",
     "dev:backend": "cd backend && bun run dev",
