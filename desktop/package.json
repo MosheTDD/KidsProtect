@@ -1,0 +1,68 @@
+{
+  "name": "desktop",
+  "version": "0.1.0",
+  "description": "KidsProtect desktop shell bundling UI and backend",
+  "author": "KidsProtect Contributors",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^24.10.2",
+    "electron": "^39.2.6",
+    "electron-builder": "^26.0.12"
+  },
+  "scripts": {
+    "electron-dev": "bun run build && bunx electron dist/main.js",
+    "build": "bunx tsc --project tsconfig.build.json",
+    "dist": "bun run build && bunx electron-builder",
+    "build-all": "cd ../frontend && bun run build && cd ../backend && bun run build && cd ../desktop && bun run dist"
+  },
+  "peerDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {},
+  "main": "dist/main.js",
+  "build": {
+    "appId": "com.kidsprotect.app",
+    "productName": "KidsProtect",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**"
+    ],
+    "extraResources": [
+      {
+        "from": "../frontend/dist",
+        "to": "app/frontend"
+      },
+      {
+        "from": "../backend/dist",
+        "to": "app/backend"
+      },
+      {
+        "from": "../backend/node_modules",
+        "to": "app/backend/node_modules"
+      },
+      {
+        "from": "../backend/state.json",
+        "to": "app/state.json"
+      }
+    ],
+    "mac": {
+      "target": [
+        "dmg"
+      ],
+      "icon": "assets/icon.icns"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis"
+        }
+      ],
+      "icon": "assets/icon.ico"
+    }
+  }
+}
