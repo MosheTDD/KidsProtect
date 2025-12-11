@@ -1,8 +1,25 @@
-# KidsProtect
+<p align="center">
+  <img src="Banner.png" alt="KidsProtect Banner" width="100%" />
+</p>
 
-[![License: GPL v3](https://img.shields.io/badge/license-GPLv3-blue.svg)](LICENSE) ![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey) ![Stack](https://img.shields.io/badge/stack-Electron%20%7C%20React%20%7C%20Bun%20%7C%20Express-593d88)
+<h1 align="center">KidsProtect</h1>
 
-Desktop app for enabling a “lockdown” mode and managing per-domain allow/deny lists. On macOS it programs PF and `/etc/hosts`; on Windows it programs `netsh advfirewall` rules and `hosts`, keeping the UI, backend, and system rules in sync.
+<p align="center">
+  Open-source parental control for macOS & Windows
+</p>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/license-GPLv3-blue.svg" alt="License: GPL v3" />
+  <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey" alt="Platforms" />
+  <img src="https://img.shields.io/badge/runtime-Electron-9cf" alt="Electron" />
+  <img src="https://img.shields.io/badge/ui-React-61dafb" alt="React" />
+  <img src="https://img.shields.io/badge/server-Bun-black" alt="Bun" />
+  <img src="https://img.shields.io/badge/api-Express-green" alt="Express" />
+</p>
+
+<p align="center">
+  Desktop app for enabling a “lockdown” mode and managing per-domain allow/deny lists. On macOS it programs PF and `/etc/hosts`; on Windows it programs `netsh advfirewall` rules and      `hosts`, keeping the UI, backend, and system rules in sync.
+</p>
 
 ## Quick links
 
