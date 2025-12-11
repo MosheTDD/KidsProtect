@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "bun --watch src/server.ts",
-    "build": "bunx tsc --project tsconfig.build.json",
+    "build": "bunx tsc --noEmit --project tsconfig.build.json && bun build src/server.ts --target=node --format=esm --bundle --outfile=dist/server.js",
+    "typecheck": "bunx tsc --noEmit --project tsconfig.build.json",
     "lint": "eslint ."
   },
   "private": true,

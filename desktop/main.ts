@@ -50,7 +50,7 @@ const startBackend = async (): Promise<void> => {
     process.resourcesPath,
     'app',
     'backend',
-    'index.js'
+    'server.js'
   );
 
   try {
