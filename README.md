@@ -14,15 +14,17 @@
   Desktop app for enabling a “lockdown” mode and managing per-domain allow/deny lists. On macOS it programs PF and `/etc/hosts`; on Windows it programs `netsh advfirewall` rules and      `hosts`, keeping the UI, backend, and system rules in sync.
 </p>
 
-## Quick links
 
-- [Quick start](#quick-start)
-- [Build for release](#build-for-release)
-- [Install from releases](#install-from-releases)
-- [Security notes](#security-notes)
-- [Disclaimer](#disclaimer)
-- [Contributing](Contributing.md)
-- [License](LICENSE)
+<div align="center">
+  <a href="#quick-start">Quick start</a> •
+  <a href="#build-for-release">Build for release</a> •
+  <a href="#install-from-releases">Install from releases</a> •
+  <a href="#security-notes">Security notes</a> •
+  <a href="#disclaimer">Disclaimer</a> •
+  <a href="Contributing.md">Contributing</a> •
+  <a href="LICENSE">License</a>
+</div>
+</br>
 
 <p align="center">
   <img src="kids-protect-home.png" alt="KidsProtect Banner" width="100%" />
