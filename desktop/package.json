@@ -29,6 +29,11 @@
     "directories": {
       "output": "release"
     },
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ],
     "files": [
       "dist/**"
     ],
@@ -44,10 +49,6 @@
       {
         "from": "../backend/node_modules",
         "to": "app/backend/node_modules"
-      },
-      {
-        "from": "../backend/state.json",
-        "to": "app/state.json"
       }
     ],
     "mac": {

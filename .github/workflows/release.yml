@@ -1,0 +1,31 @@
+name: Release
+on:
+  push:
+    branches: [main] # or: tags: ['v*'] for tag-driven releases
+permissions:
+  contents: write
+jobs:
+  release:
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      CSC_IDENTITY_AUTO_DISCOVERY: false # no mac signing
+      CSC_FOR_PULL_REQUEST: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install deps
+        run: bun install --frozen-lockfile
+
+      - name: Build and publish
+        uses: electron-builder/electron-builder-action@v3
+        with:
+          package_root: desktop
+          args: --publish always
