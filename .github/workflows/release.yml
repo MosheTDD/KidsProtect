@@ -9,6 +9,8 @@ permissions:
 
 jobs:
   release:
+    permissions:
+      contents: write
     strategy:
       matrix:
         os: [macos-latest, windows-latest]
