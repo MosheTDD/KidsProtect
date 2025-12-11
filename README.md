@@ -1,13 +1,6 @@
 <p align="center">
   <img src="Banner.png" alt="KidsProtect Banner" width="100%" />
 </p>
-
-<h1 align="center">KidsProtect</h1>
-
-<p align="center">
-  Open-source parental control for macOS & Windows
-</p>
-
 <p align="center">
   <img src="https://img.shields.io/badge/license-GPLv3-blue.svg" alt="License: GPL v3" />
   <img src="https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey" alt="Platforms" />
