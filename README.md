@@ -24,6 +24,10 @@
 - [Contributing](Contributing.md)
 - [License](LICENSE)
 
+<p align="center">
+  <img src="kids-protect-home.png" alt="KidsProtect Banner" width="100%" />
+</p>
+
 ## What it does
 
 - One-click lockdown that blocks all outbound traffic except whitelisted domains.
