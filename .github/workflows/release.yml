@@ -1,9 +1,12 @@
 name: Release
+
 on:
   push:
-    branches: [main] # or: tags: ['v*'] for tag-driven releases
+    branches: [main] # switch to tags: ['v*'] if you prefer tag-driven releases
+
 permissions:
   contents: write
+
 jobs:
   release:
     strategy:
@@ -17,15 +20,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
       - name: Install deps
+        shell: bash
         run: bun install --frozen-lockfile
 
-      - name: Build and publish
+      - name: Build frontend and backend
+        shell: bash
+        run: |
+          cd frontend && bun run build
+          cd ../backend && bun run build
+
+      - name: Package and publish desktop
         uses: samuelmeuli/action-electron-builder@v1
         with:
-          github_token: ${{ secrets.github_token }}
-          release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+          app_root: desktop
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          release: true
+          build_script_name: dist
