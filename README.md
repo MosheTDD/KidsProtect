@@ -10,6 +10,7 @@ Desktop app for enabling a “lockdown” mode and managing per-domain allow/den
 - [Build for release](#build-for-release)
 - [Install from releases](#install-from-releases)
 - [Security notes](#security-notes)
+- [Disclaimer](#disclaimer)
 - [Contributing](Contributing.md)
 - [License](LICENSE)
 
@@ -65,6 +66,10 @@ Artifacts land in `desktop/release/` (DMG on macOS, NSIS installer on Windows wh
 
 - The backend is unauthenticated; run it bound to `127.0.0.1` and keep it firewalled when elevated.
 - Avoid shipping personal state; do not bundle local `backend/state.json` in releases if it contains your data.
+
+## Disclaimer
+
+KidsProtect is provided "as is" without warranty of any kind. It modifies system networking rules and may disrupt connectivity or other software. Use at your own risk; ensure you have the necessary admin rights and backups. See the GPL-3.0 [LICENSE](LICENSE) for warranty and liability terms.
 
 ## Contributing
 
