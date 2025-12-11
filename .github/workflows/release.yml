@@ -33,11 +33,14 @@ jobs:
         env:
           ELECTRON_MIRROR: https://github.com/electron/electron/releases/download/
         run: |
-          n=0
-          until [ $n -ge 3 ]; do
-            bun install --frozen-lockfile && break
-            n=$((n+1))
-            echo "bun install failed (attempt $n), retrying in 10s..."
+          attempts=0
+          until bun install --frozen-lockfile; do
+            attempts=$((attempts+1))
+            if [ $attempts -ge 3 ]; then
+              echo "bun install failed after $attempts attempts."
+              exit 1
+            fi
+            echo "bun install failed (attempt $attempts), retrying in 10s..."
             sleep 10
           done
 
