@@ -28,9 +28,18 @@ jobs:
         with:
           bun-version: latest
 
-      - name: Install deps
+      - name: Install deps (retry)
         shell: bash
-        run: bun install --frozen-lockfile
+        env:
+          ELECTRON_MIRROR: https://github.com/electron/electron/releases/download/
+        run: |
+          n=0
+          until [ $n -ge 3 ]; do
+            bun install --frozen-lockfile && break
+            n=$((n+1))
+            echo "bun install failed (attempt $n), retrying in 10s..."
+            sleep 10
+          done
 
       - name: Build frontend and backend
         shell: bash
