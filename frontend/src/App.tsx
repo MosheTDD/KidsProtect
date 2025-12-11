@@ -93,7 +93,7 @@ function App() {
 
           <a
             className='text-xs text-slate-500'
-            href='www.linkedin.com/in/moshe-khovailo'
+            href='https://www.linkedin.com/in/moshe-khovailo'
             target='_blank'
           >
             Made by Moshe Khovailo
