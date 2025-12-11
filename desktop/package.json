@@ -6,6 +6,10 @@
   "module": "index.ts",
   "type": "module",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MosheTDD/KidsProtect.git"
+  },
   "devDependencies": {
     "@types/bun": "latest",
     "@types/node": "^24.10.2",
@@ -32,7 +36,9 @@
     "electronVersion": "39.2.6",
     "publish": [
       {
-        "provider": "github"
+        "provider": "github",
+        "owner": "moshekhovailo",
+        "repo": "KidsProtect"
       }
     ],
     "files": [
