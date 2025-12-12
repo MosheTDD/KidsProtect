@@ -10,7 +10,7 @@ import {
   clearAll,
 } from '../services/system.js';
 import { normalizeDomain } from '../utils/domain.js';
-import { HttpError } from '../middlewares/error-handler.js';
+import { HttpError } from '../errors/http-error.js';
 
 type DomainPayload = { domain?: string };
 

@@ -49,6 +49,7 @@
 - Bun ≥ 1.3
 - Node.js ≥ 18 (needed by Electron and when running the backend as a service)
 - macOS 12+ or Windows 10/11 for system rule control
+- Windows: run KidsProtect (or your dev terminal) **as administrator** so firewall and hosts changes can be applied.
 
 ## Quick start
 
@@ -76,7 +77,7 @@ Artifacts land in `desktop/release/` (DMG on macOS, NSIS installer on Windows wh
 
 - Download the latest release from GitHub Releases (DMG for macOS, NSIS installer for Windows).
 - macOS: open the DMG and drag KidsProtect to Applications. First launch may prompt for admin rights to apply PF/hosts rules.
-- Windows: run the installer. UAC will prompt when creating firewall rules or services. The backend listens on localhost for the Electron UI.
+- Windows: run the installer. The app requests elevation at launch so UAC will prompt once, allowing it to create firewall rules and update `hosts`. The backend listens on localhost for the Electron UI.
 
 ## Security notes
 

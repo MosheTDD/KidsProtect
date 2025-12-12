@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import type { NextFunction, Request, Response } from 'express';
 import { getAuthToken } from '../services/auth-token.js';
-import { HttpError } from './error-handler.js';
+import { HttpError } from '../errors/http-error.js';
 
 const HEADER_NAME = 'x-kidsprotect-token';
 

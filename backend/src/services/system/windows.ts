@@ -1,5 +1,5 @@
 // backend/src/services/system/windows.ts
-import { exec } from 'child_process';
+import { exec, type ExecException } from 'child_process';
 import { promisify } from 'util';
 import type { SystemController } from './base.js';
 import {
@@ -8,6 +8,7 @@ import {
   clearAllKidsProtectEntries,
 } from './hosts.js';
 import { expandWhitelistDomains, resolveDomainsToIps } from './resolve.js';
+import { AdminPrivilegesError } from '../../errors/http-error.js';
 
 const execAsync = promisify(exec);
 
@@ -16,13 +17,40 @@ const ALLOW_LOOPBACK_RULE_NAME = 'KidsProtect_AllowLoopback';
 const ALLOW_LIST_RULE_NAME = 'KidsProtect_AllowList';
 const ALLOW_DNS_RULE_NAME = 'KidsProtect_AllowDNS';
 
+type NetshError = ExecException & { stdout?: string; stderr?: string };
+
+const requiresElevation = (err: unknown): boolean => {
+  const parts: string[] = [];
+
+  const netshErr = err as NetshError;
+  if (typeof netshErr?.message === 'string') parts.push(netshErr.message);
+  if (typeof netshErr?.stderr === 'string') parts.push(netshErr.stderr);
+  if (typeof netshErr?.stdout === 'string') parts.push(netshErr.stdout);
+
+  const text = parts.join(' ').toLowerCase();
+  return text.includes('requires elevation') || text.includes('access is denied');
+};
+
 async function runNetsh(args: string): Promise<void> {
   try {
     await execAsync(`netsh ${args}`);
   } catch (err: unknown) {
+    if (requiresElevation(err)) {
+      console.error(
+        '[windows] netsh failed: administrator privileges required to change firewall rules'
+      );
+      throw new AdminPrivilegesError(
+        'Administrator privileges are required to change Windows Firewall rules. Please run KidsProtect as an administrator.'
+      );
+    }
+
+    const netshErr = err as NetshError;
+    const stderr =
+      typeof netshErr?.stderr === 'string' ? netshErr.stderr.trim() : '';
     const message = err instanceof Error ? err.message : String(err);
-    console.error('[windows] netsh failed:', message);
-    throw new Error(`netsh failed: ${message}`);
+    const details = stderr ? `${message} (${stderr})` : message;
+    console.error('[windows] netsh failed:', details);
+    throw new Error(`netsh failed: ${details}`);
   }
 }
 

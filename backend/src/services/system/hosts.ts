@@ -2,6 +2,7 @@ import os from 'os';
 import { promises as fs } from 'fs';
 import { runAsAdminScript } from './macos-utils.js';
 import { normalizeDomain } from '../../utils/domain.js';
+import { AdminPrivilegesError } from '../../errors/http-error.js';
 
 const TAG = '# KidsProtect managed';
 
@@ -25,6 +26,12 @@ function getHostsPath(): string {
 async function readHostsLines(): Promise<{ path: string; lines: string[] }> {
   const hostsPath = getHostsPath();
   const text = await fs.readFile(hostsPath, 'utf8').catch((err) => {
+    const code = (err as NodeJS.ErrnoException | undefined)?.code;
+    if (code === 'EACCES') {
+      throw new AdminPrivilegesError(
+        'Administrator privileges are required to read the hosts file.'
+      );
+    }
     throw new Error(`Failed to read hosts file: ${err.message}`);
   });
   const lines = text.split(/\r?\n/);
@@ -37,6 +44,12 @@ async function writeHostsLines(
 ): Promise<void> {
   const text = lines.join('\n') + '\n';
   await fs.writeFile(pathStr, text, 'utf8').catch((err) => {
+    const code = (err as NodeJS.ErrnoException | undefined)?.code;
+    if (code === 'EACCES') {
+      throw new AdminPrivilegesError(
+        'Administrator privileges are required to modify the hosts file.'
+      );
+    }
     throw new Error(`Failed to write hosts file: ${err.message}`);
   });
 }
