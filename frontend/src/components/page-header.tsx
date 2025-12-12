@@ -6,6 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import logo from '@/assets/logo-no-bg.png';
 
 interface PageHeaderProps {
   onRefresh: () => void;
@@ -16,11 +17,14 @@ interface PageHeaderProps {
 export function PageHeader({ onRefresh, onUndoAll, busy = false }: PageHeaderProps) {
   return (
     <header className="mb-6 flex items-center justify-between">
-      <div>
-        <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Parental Control Panel
-        </p>
-        <h1 className="text-3xl font-bold text-slate-900">KidsProtect</h1>
+      <div className="flex items-center gap-3">
+        <img src={logo} alt="KidsProtect" className="h-12 w-12" />
+        <div>
+          <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+            Parental Control Panel
+          </p>
+          <h1 className="text-3xl font-bold text-slate-900">KidsProtect</h1>
+        </div>
       </div>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
