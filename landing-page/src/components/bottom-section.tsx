@@ -21,7 +21,7 @@ const footerLinks: FooterLink[] = [
   { label: 'Donate', href: 'https://github.com/sponsors/MosheTDD' },
 ];
 
-export function Footer() {
+export function BottomSection() {
   return (
     <footer id='github' className='bg-[#0c1b34] text-slate-100'>
       <div className='mx-auto max-w-6xl px-4 py-10'>

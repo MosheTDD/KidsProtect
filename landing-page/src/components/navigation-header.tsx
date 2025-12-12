@@ -8,7 +8,7 @@ const navLinks = [
   { label: 'GitHub', href: 'https://github.com/MosheTDD/KidsProtect' },
 ];
 
-export function Header() {
+export function NavigationHeader() {
   return (
     <header className='w-full'>
       <div className='mx-auto flex max-w-6xl flex-col items-center gap-3 px-4 py-4 text-center md:flex-row md:items-center md:gap-4 md:px-4 md:py-5 md:text-left'>
