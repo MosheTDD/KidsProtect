@@ -1,9 +1,9 @@
 import fs from 'fs/promises';
-import os from 'os';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import type { AppState } from '../models/state.js';
 import { normalizeDomain } from '../utils/domain.js';
+import { resolveStateFilePath } from '../utils/storage-paths.js';
 
 const defaultState: AppState = {
   lockdown: false,
@@ -15,34 +15,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const LEGACY_STATE_FILE = path.resolve(__dirname, '..', '..', 'state.json');
-
-const resolveStateFilePath = (): string => {
-  const customPath = process.env.KIDSPROTECT_STATE_FILE;
-  if (customPath) {
-    return path.resolve(customPath);
-  }
-
-  if (process.platform === 'win32') {
-    const appData =
-      process.env.APPDATA ?? path.join(os.homedir(), 'AppData', 'Roaming');
-    return path.join(appData, 'KidsProtect', 'state.json');
-  }
-
-  if (process.platform === 'darwin') {
-    return path.join(
-      os.homedir(),
-      'Library',
-      'Application Support',
-      'KidsProtect',
-      'state.json'
-    );
-  }
-
-  const xdgDataHome =
-    process.env.XDG_DATA_HOME ?? path.join(os.homedir(), '.local', 'share');
-
-  return path.join(xdgDataHome, 'KidsProtect', 'state.json');
-};
 
 const STATE_FILE = resolveStateFilePath();
 

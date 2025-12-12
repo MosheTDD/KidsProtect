@@ -1,16 +1,75 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, session } from 'electron';
 import { spawn } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { AUTH_HEADER_NAME, getAuthToken } from './auth.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const isDev = !app.isPackaged;
+const backendPort = (() => {
+  const parsed = Number(process.env.PORT);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 8787;
+})();
+const backendHost = (() => {
+  const host = (process.env.HOST ?? '').trim();
+  if (host === '127.0.0.1' || host === '::1' || host === 'localhost') {
+    return host === 'localhost' ? '127.0.0.1' : host;
+  }
+
+  if (host) {
+    console.warn(
+      `[desktop] Ignoring non-loopback HOST value "${host}", defaulting to 127.0.0.1.`,
+    );
+  }
+
+  return '127.0.0.1';
+})();
+const backendHosts = new Set([backendHost, 'localhost', '127.0.0.1', '::1']);
 
 let backendProcess: ReturnType<typeof spawn> | null = null;
 let backendStarted = false;
 let mainWindow: BrowserWindow | null = null;
+let authHeaderInstalled = false;
+
+const installRequestAuth = async (): Promise<void> => {
+  if (authHeaderInstalled) return;
+
+  try {
+    const token = await getAuthToken();
+    session.defaultSession.webRequest.onBeforeSendHeaders(
+      {
+        urls: [
+          `http://127.0.0.1:${backendPort}/*`,
+          `http://localhost:${backendPort}/*`,
+          `http://[::1]:${backendPort}/*`,
+        ],
+      },
+      (details, callback) => {
+        const url = new URL(details.url);
+        const matchesPort = String(url.port || '80') === String(backendPort);
+        const matchesHost = backendHosts.has(url.hostname);
+
+        if (matchesPort && matchesHost) {
+          callback({
+            cancel: false,
+            requestHeaders: {
+              ...details.requestHeaders,
+              [AUTH_HEADER_NAME]: token,
+            },
+          });
+          return;
+        }
+
+        callback({ cancel: false, requestHeaders: details.requestHeaders });
+      },
+    );
+    authHeaderInstalled = true;
+  } catch (error) {
+    console.error('[desktop] Failed to install auth header', error);
+  }
+};
 
 const getProdFrontendUrl = (): string => {
   const indexPath = path.join(
@@ -110,9 +169,10 @@ if (!gotLock) {
     }
   });
 
-  app.whenReady().then(() => {
-    void startBackend();
-    void createWindow();
+  app.whenReady().then(async () => {
+    await installRequestAuth();
+    await startBackend();
+    await createWindow();
   });
 
   app.on('activate', () => {
