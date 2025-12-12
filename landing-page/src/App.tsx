@@ -2,8 +2,8 @@ import { FeatureSection } from '@/components/feature-section';
 
 import { HeroSection } from '@/components/hero-section';
 import { HowItWorksSection } from '@/components/how-it-works-section';
-import { Header } from '@/components/Header';
-import { Footer } from '@/components/Footer';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
 
 function App() {
   return (
